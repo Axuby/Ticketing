@@ -1,0 +1,18 @@
+apiVersion: skaffold/v2alpha3
+kind: Config
+deploy:      #lists out all the different config files to be loaded into the cluster
+  kubectl:
+    manifests:
+      - ./infra/k8s/*
+build:
+  local:
+    push: false
+artifacts:
+    - images: axuby/auth
+      context: auth
+      docker:
+        dockerfile: dockerfile
+      sync:
+        manual: #sync manually with this config
+         - src: 'src/**/*.ts'
+           dest: . # throw it in the corresponding path in the container

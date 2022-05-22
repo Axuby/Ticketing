@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers:
+        - name: auth  # array of entries for running containers  
+          image: axuby/auth
+--- #create a K8s service that will run alongside, to get access to the pods
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-srv
+spec: #tells service how to behave
+  selector:
+    app: auth
+  ports: # ports to be exposed
+    - name: auth
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
+#default type is a clusterIP service
+
+
+
+
+    
