@@ -7,6 +7,8 @@ deploy:      #lists out all the different config files to be loaded into the clu
 build:
   local:
     push: false
+  # googleCloudBuild:
+  # projectId:
 artifacts:
     - images: axuby/auth
       context: auth
