@@ -1,20 +1,20 @@
-apiVersion: skaffold/v2alpha3
+apiVersion: skaffold/v2beta29
 kind: Config
-deploy:      #lists out all the different config files to be loaded into the cluster
+metadata:
+  name: ticketing
+build:
+  artifacts:
+  - image: axuby/auth
+    context: auth
+    docker:
+      dockerfile: Dockerfile
+  - image: mongo
+    context: auth
+    buildpacks:
+      builder: gcr.io/buildpacks/builder:v1
+deploy:
   kubectl:
     manifests:
-      - ./infra/k8s/*
-build:
-  local:
-    push: false
-  # googleCloudBuild:
-  # projectId:
-artifacts:
-    - images: axuby/auth
-      context: auth
-      docker:
-        dockerfile: dockerfile
-      sync:
-        manual: #sync manually with this config
-         - src: 'src/**/*.ts'
-           dest: . # throw it in the corresponding path in the container
+    - infra/k8s/auth-depl.yaml
+    - infra/k8s/auth-mongo-depl.yaml
+    - infra/k8s/ingress-srv.yaml

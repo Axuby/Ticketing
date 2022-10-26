@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-mongo-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-mongo
+  template:
+    metadata:
+      labels:
+        app: auth-mongo
+    spec:
+      containers:
+        - name: auth-mongo 
+          image: mongo
+--- #create a K8s service that will run alongside, to get access to ( cluster Ip Service the pods
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-mongo-srv
+spec: #tells service how to behave
+  selector:
+    app: auth-mongo  # app with label
+  ports: # ports to be exposed
+    - name: db #for logging purposes
+      protocol: TCP
+      port: 27017
+      targetPort: 27017
+#default type is a clusterIP service
+
+
+
+
+    
